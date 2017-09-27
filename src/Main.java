@@ -6,7 +6,12 @@ public class Main {
         BBB();
     }
 
-    static int[] array = new int[]{-3,-2,2,1,-3,5};
+    // для проверки                                                    ответ должен быть:
+    static int[] array1 = new int[]{1, 4, 6, 8, 9, 6, 11};          // купить при 1 , продать при 11
+    static int[] array2 = new int[]{14 , 5 , 7 , 2 , 2 , 1};        // купить при 5 , продать при 7
+    static int[] array3 = new int[]{9 , 8 , 7 , 6 , 5};             // ошибка(Нет выгоды)
+
+
     static int maxSum = 0;
     static int finalLeft = 0;
     static int finalRight = 0;
@@ -27,7 +32,7 @@ public class Main {
             int counter = 0;
             int LeftSum = array[center];
             int leftCount = center;
-            for (int i = center; i >= 0; i--) {
+            for (int i = center; i >= left; i--) {
                 counter += array[i];
                 if (LeftSum < counter) {
                     LeftSum = counter;
@@ -69,8 +74,37 @@ public class Main {
         }
     }
 
+    // проверка (в скобках можно ограничить массив)
     public static void BBB(){
-        AAA(array ,0 , 5);
-        System.out.println(Arrays.toString(Arrays.copyOfRange(array, finalLeft , finalRight + 1)));
+        AAA(CCC(array1) ,0 , 5);
+        System.out.println(Arrays.toString(Arrays.copyOfRange(array1, finalLeft , finalRight + 2)) + " Выручка: " + Sum(array1 , finalLeft , finalRight + 2));
+        maxSum = 0;
+        finalRight = 0;
+        finalLeft = 0;
+        AAA(CCC(array2) ,0 , 4);
+        System.out.println(Arrays.toString(Arrays.copyOfRange(array2, finalLeft , finalRight + 2)) + " Выручка: " + Sum(array2, finalLeft , finalRight + 2));
+        maxSum = 0;
+        finalRight = 0;
+        finalLeft = 0;
+        AAA(CCC(array3) ,0 , 3);
+        System.out.println(Arrays.toString(Arrays.copyOfRange(array3, finalLeft , finalRight + 2)) + " Выручка: " + Sum(array3, finalLeft , finalRight + 2));
+    }
+
+    public static int[] CCC(int[] array){
+        if (array.length == 0) throw new NullPointerException("Нет массива");
+        int[] result = new int[array.length - 1];
+        for (int i = 0; i < array.length - 1; i++){
+            result[i] = array[i + 1] - array[i];
+        }
+        int countError = 0;
+        for (int j = 0; j < array.length - 1; j++ ){
+            if (result[j] < 0) countError++;
+        }
+        if (countError == result.length) throw new NullPointerException("Нет выгоды");
+        return result;
+    }
+
+    public static int Sum(int[] array , int left , int right){
+        return array[right - 1] - array[left];
     }
 }
